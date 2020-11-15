@@ -366,9 +366,12 @@ static CURLcode post_per_transfer(struct GlobalConfig *global,
       ;
     }
     else if(result && global->showerror) {
-      fprintf(global->errors, "curl: (%d) %s\n", result,
+      char urlbuf[256]="";
+      msnprintf(urlbuf, sizeof(urlbuf),
+                " [URL %s]", per->this_url);
+      fprintf(global->errors, "curl: (%d) %s%s\n", result,
               (per->errorbuffer[0]) ? per->errorbuffer :
-              curl_easy_strerror(result));
+              curl_easy_strerror(result), urlbuf);
       if(result == CURLE_PEER_FAILED_VERIFICATION)
         fputs(CURL_CA_CERT_ERRORMSG, global->errors);
     }
